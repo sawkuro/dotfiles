@@ -1,131 +1,264 @@
 {
-    "layer": "top",
-    "position": "top",
-    "reload_style_on_change": true,
-    "modules-left": ["custom/notification","custom/pacman","tray"],
-    "modules-center": ["hyprland/workspaces"],
-    "modules-right": ["group/expand", "network", "clock"], 
+    //"layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    //"gtk-layer-shell": true,
+    // "height": 28, // Waybar height (to be removed for auto height)
+    // "width": 1920, // Waybar width
+    // Choose the order of the modules
+    "modules-left": ["hyprland/workspaces", "hyprland/mode"],
+    //"modules-center": ["hyprland/window"],
+    "modules-center": ["mpd", "custom/spotify" ],
+    "modules-right": ["cpu", "memory", "pulseaudio", "clock", "tray"],
+    // Modules configuration
+    // "hyprland/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
 
+    "hyprland/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
 
-    "hyprland/workspaces": {
+    "cava": {
+        //"cava_config": "$XDG_CONFIG_HOME/cava/config",
+        "framerate": 30,
+        "autosens": 1,
+        "sensitivity": 100,
+        "bars": 14,
+        "lower_cutoff_freq": 50,
+        "higher_cutoff_freq": 10000,
+        "method": "pipewire",
+        "source": "auto",
+        "stereo": true,
+        "reverse": false,
+        "bar_delimiter": 0,
+        "monstercat": false,
+        "waves": false,
+        "noise_reduction": 0.77,
+        "input_delay": 2,
+        "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
+        "actions": {
+                   "on-click-right": "mode"
+                   }
+    },
+
+    "custom/spotify": {
+        "format": "{icon} {}  ",
+        "escape": true,
+        "return-type": "json",
+        "max-length": 40,
+        "on-click": "playerctl -p spotify play-pause",
+        "on-click-right": "killall spotify",
+        "exec": "$HOME/.config/waybar/modules/mediaplayer.py --player spotify 2> /dev/null",
+        "exec-if": "pgrep spotify",
+    },
+
+    "mpd": {
+        "server": "127.0.0.1",
+        "port": 6600,
+        "tooltip": false,
+        "exec-if": "pgrep mpd",
+        //"format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{artist} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+//        "format-disconnected": "Disconnected ",
+//        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "format-disconnected": "",
+        "format-stopped": "",
+        "unknown-tag": "N/A",
+        "interval": 2,
+        "max-length": 60,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "on": "<span color=\"#f53c3c\"></span> ",
+            "off": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        }
+    },
+
+    "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "active": "",
-            "default": "",
-            "empty": ""
-        },
-        "persistent-workspaces": {
-            "*": [ 1,2,3,4,5 ]
+            "activated": "",
+            "deactivated": ""
         }
     },
-    "custom/notification": {
-        "tooltip": false,
-        "format": "",
-        "on-click": "swaync-client -t -sw",
-        "escape": true
+
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
     },
+
     "clock": {
-        "format": "{:%I:%M:%S %p} ",
-        "interval": 1,
-        "tooltip-format": "<tt>{calendar}</tt>",
-        "calendar": {
-            "format": {
-                "today": "<span color='#fAfBfC'><b>{}</b></span>"
-            }
-        },
-        "actions": {
-            "on-click-right": "shift_down",
-            "on-click": "shift_up"
-        }
+        "timezone": "US/Mountain",
+        "format": "{:%H:%M %Z} ",
+        "format-alt": "{:%a, %b %d %C%y} ",
+        "tooltip": false,
+        "on-click-right": "gsimplecal"
     },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "on-click": "kitty -e bash -ci htop --sort-key PERCENT_CPU"
+    },
+
+    "memory": {
+        "format": "{}% ",
+        "on-click": "kitty -e bash -ci htop --sort-key PERCENT_MEM"
+    },
+
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", ""]
+    },
+
+ "battery": {
+        "format": "{icon} {capacity}% - {time}",
+        "format-icons": ["", "", "", "", ""],
+        "format-time": "{H}h{M}m",
+        "format-charging": " {icon} {capacity}% - {time}",
+        "format-full": " {icon}",
+        "interval": 30,
+        "states": {
+            "warning": 25,
+            "critical": 10
+        },
+        "tooltip": false,
+        "on-click": "2"
+    },
+
+    // % calculated based on (!!) design capacity:
+    // upower -i /org/freedesktop/UPower/devices/battery_BAT0
+    "custom/bat0": {
+        "states": {
+            "good": 95,
+            "warning": 15,
+            "critical": 10
+        },
+        "exec": "~/.config/waybar/modules/battery.py BAT0",
+        // todo: exec-if not working script gets restarted when reloading hyprland
+        // "exec-if": "[ $(pgrep battery.py | wc -l) -lt 1 ]",
+        "return-type": "json",
+        "format": "{} {percentage}% {icon}",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false,
+        "on-click-right": "kitty --start-as normal bash -i bat",
+    },
+
     "network": {
-        "format-wifi": "",
         "format-ethernet":"",
         "format-disconnected": "",
-        "tooltip-format-disconnected": "Error",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
         "tooltip-format-ethernet": "{ifname} 🖧 ",
         "on-click": "kitty nmtui"
     },
-    "bluetooth": {
-        "format-on": "󰂯",
-        "format-off": "BT-off",
-        "format-disabled": "󰂲",
-        "format-connected-battery": "{device_battery_percentage}% 󰂯",
-        "format-alt": "{device_alias} 󰂯",
-        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-        "tooltip-format-enumerate-connected": "{device_alias}\n{device_address}",
-        "tooltip-format-enumerate-connected-battery": "{device_alias}\n{device_address}\n{device_battery_percentage}%",
-        "on-click-right": "blueman-manager"
-    },
-    "battery": {
-        "interval":30,
-        "states": {
-            "good": 95,
-            "warning": 30,
-            "critical": 20
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% 󰂄",
-        "format-plugged": "{capacity}% 󰂄 ",
-        "format-alt": "{time} {icon}",
-        "format-icons": [
-            "󰁻",
-            "󰁼",
-            "󰁾",
-            "󰂀",
-            "󰂂",
-            "󰁹"
-        ]
-    },
-    "custom/pacman": {
-        "format": "󰅢 {}",
-        "interval": 30,
-        "exec": "checkupdates | wc -l",
-        "exec-if": "exit 0",
-        "on-click": "kitty sh -c 'yay -Syu; echo Done - Press enter to exit; read'; pkill -SIGRTMIN+8 waybar",
-        "signal": 8,
-        "tooltip": false
-    },
-    "custom/expand": {
-        "format": "",
-        "tooltip": false
-    },
-    "custom/endpoint":{
-        "format": "|",
-        "tooltip": false
-    },
-    "group/expand": {
-        "orientation": "horizontal",
-        "drawer": {
-            "transition-duration": 600,
-            "transition-to-left": true,
-            "click-to-reveal": true
-        },
-        "modules": ["custom/expand", "custom/colorpicker","cpu","memory","temperature","custom/endpoint"]
-    },
-    "custom/colorpicker": {
-        "format": "{}",
+
+    "custom/vpn":{
+        "format": "vpn {icon}",
+        "tooltip-format": "{icon}",
+        "exec": "~/.config/waybar/modules/vpn",
         "return-type": "json",
-        "interval": "once",
-        "exec": "~/.config/waybar/scripts/colorpicker.sh -j",
-        "on-click": "~/.config/waybar/scripts/colorpicker.sh",
-        "signal": 1
+        "interval": 5,
+        "format-icons": ["",""]
     },
-    "cpu": {
-        "format": "󰻠",
-        "tooltip": true
+
+    "pulseaudio": {
+        "tooltip": false,
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}  {format_source}",
+        "format-bluetooth-muted": " {icon}  {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click-right": "pavucontrol",
+        "on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
     },
-    "memory": {
-        "format": ""
+
+    "custom/kbd": {
+        "format": "{}",
+        //"format-alt": "{alt}: {}",
+        //"format-alt-click": "click-left",
+        "return-type": "json",
+        "exec": "$HOME/.config/waybar/modules/kbd_indicator"
     },
-    "temperature": {
-        "critical-threshold": 80,
-        "format": ""
+
+    "custom/covid": {
+        "exec": "~/bin/covid_waybar -c 'Italy' -L -D -N",
+        //"exec-on-event": false,
+        "return-type": "json",
+        "interval": 300,
+        "format": "{} {icon}",
+        "format-icons": [""],
+        //"exec-if": "ping covid.ourworldindata.org -c1",
+        //"on-click-right": "kitty -e bash -i ~/bin/covid_status -c 'Austria' -L -D -N -f gplotpdf",
+        "on-click-right": "kitty -e bash -i ~/bin/covid_longformat -c 'Austria' -L -D -N -l",
+        "on-click": "~/bin/covid_dbus -c 'Austria' -L -D -N -d"
     },
-    "tray": {
-        "icon-size": 14,
-        "spacing": 10
+
+		"bluetooth": {
+			"format": "{icon}",
+			"format-alt": "bluetooth: {status}",
+			"interval": 30,
+			"format-icons": {
+				"enabled": "",
+				"disabled": ""
+			},
+			"tooltip-format": "{status}"
+		},
+
+    "custom/weather": {
+        "format": "{}",
+        //"format-alt": "{alt}: {}",
+        //"format-alt-click": "click-left",
+        "interval": 300,
+        "return-type": "json",
+        // sleep before curl seems required because network might not yet be up
+        // this avoids having to wait until interval until the indicator comes
+        // back online
+        "exec": "sleep 5 && curl -s 'https://wttr.in/Pordenone?format=1' |jq --unbuffered --compact-output -M -R '{text:.}'",
+       // "exec-if": "ping wttr.in -c1",
+        "on-click-right": "kitty --start-as fullscreen bash -ci ~/bin/wttr"
+        // "on-click-right": "kitty -e bash -ci ~/bin/wttr"
     }
 }
