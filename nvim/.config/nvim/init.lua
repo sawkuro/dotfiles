@@ -1,0 +1,6 @@
+require("core.options")
+require("core.keymaps")
+require("core.lazy")
+require("plugins.rose-pine")
+require("plugins.lualine")
+require("plugins.telescope")
