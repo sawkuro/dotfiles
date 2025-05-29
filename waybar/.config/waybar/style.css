@@ -80,8 +80,7 @@ window#waybar.chromium {
     border-bottom: 3px solid @fg-color;
 }
 
-#workspaces button.focused {
-    background-color: @bg-color;
+#workspaces button.active {
     border-bottom: 3px solid @fg-color;
 }
 

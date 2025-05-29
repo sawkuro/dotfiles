@@ -6,9 +6,8 @@
     // "width": 1920, // Waybar width
     // Choose the order of the modules
     "modules-left": ["hyprland/workspaces", "hyprland/mode"],
-    //"modules-center": ["hyprland/window"],
     "modules-center": ["mpd", "custom/spotify" ],
-    "modules-right": ["cpu", "memory", "pulseaudio", "clock", "tray"],
+    "modules-right": ["cpu", "memory", "pulseaudio", "clock",],
     // Modules configuration
     // "hyprland/workspaces": {
     //     "disable-scroll": true,
@@ -112,7 +111,7 @@
 
     "clock": {
         "timezone": "US/Mountain",
-        "format": "{:%H:%M %Z} ",
+        "format": "{:%H:%M } ",
         "format-alt": "{:%a, %b %d %C%y} ",
         "tooltip": false,
         "on-click-right": "gsimplecal"
